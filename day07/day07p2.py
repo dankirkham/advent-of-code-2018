@@ -4,7 +4,6 @@ from collections import defaultdict
 # Step G must be finished before step I can begin.
 
 def build_dicts():
-    parents = defaultdict(set)
     children = defaultdict(set)
     nodes = set()
     with open('input7.in') as f:
@@ -15,22 +14,11 @@ def build_dicts():
                 parent = m.group(2)
 
                 children[parent].add(child)
-                parents[child].add(parent)
 
                 nodes.add(child)
                 nodes.add(parent)
 
-    return nodes, parents, children
-
-def find_roots(nodes, children):
-    """Find child with no parents, i.e. the root of the tree."""
-    roots = set()
-
-    for node in nodes:
-        if not children[node]:
-            roots.add(node)
-
-    return roots
+    return nodes, children
 
 class Worker:
     def __init__(self):
@@ -119,8 +107,6 @@ def time_instructions(nodes, children, worker_count=5):
                 return time
 
 
-nodes, parents, children = build_dicts()
-
-roots = find_roots(nodes, children)
+nodes, children = build_dicts()
 
 print(time_instructions(nodes, children))
