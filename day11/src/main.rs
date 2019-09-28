@@ -42,23 +42,23 @@ fn main() {
     let mut max_size: usize = 0;
     let mut max_power: i32 = 0;
     for size in 3..301 {
-        println!("{}", size);
         for x in 0..(WIDTH - size) {
-            for y in 0..(HEIGHT - size) {
-                let mut power_level: i32 = 0;
+            let mut power_level: i32 = 0;
+            for i in 0..size - 1 {
+                power_level += &fuel_cells[(x + (i) * WIDTH)..((x + size) + (i) * WIDTH)].into_iter().sum();
+            }
 
-                for i in 0..size {
-                    power_level += &fuel_cells[(x + (y + i) * WIDTH)..((x + size) + (y + i) * WIDTH)].into_iter().sum()
-                }
+            for y in 0..(HEIGHT - size) {
+                power_level += &fuel_cells[(x + (y + size - 1) * WIDTH)..((x + size) + (y + size - 1) * WIDTH)].into_iter().sum();
 
                 if power_level > max_power {
                     max_x = x;
                     max_y = y;
                     max_size = size;
                     max_power = power_level;
-
-                    println!("Max power is {} at ({},{},{})", max_power, max_x, max_y, max_size);
                 }
+
+                power_level -= &fuel_cells[(x + y * WIDTH)..((x + size) + y * WIDTH)].into_iter().sum()
             }
         }
     }
